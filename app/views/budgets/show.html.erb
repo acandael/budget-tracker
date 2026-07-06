@@ -1,0 +1,33 @@
+<p style="color: green"><%= notice %></p>
+<header>
+  <%= link_to "Back to budgets", budgets_path %>
+  <h1><%= @budget.formatted_month %> Budget</h1>
+  <%= link_to "Edit this budget", edit_budget_path(@budget) %> |
+  <%= button_to "Destroy this budget", @budget, method: :delete, data: { turbo_confirm: "Are you sure?"} %>
+  <%= link_to "Add a new transaction", new_budget_transaction_path(@budget) %>
+</header>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Amount</th>
+      <th>Due Date</th>
+      <th>Type</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @budget.transactions.each do |transaction| %>
+      <tr>
+        <td><%= transaction.name.capitalize %></td>
+        <td><%= number_to_currency(transaction.amount) %></td>
+        <td><%= transaction.formatted_due_date %></td>
+        <td><%= transaction.transaction_type.capitalize %></td>
+        <td>
+          <%= link_to "Edit", edit_budget_transaction_path(@budget, transaction) %>
+          <%= button_to "Destroy", budget_transaction_path(@budget, transaction), method: :delete, data: { turbo_confirm: "Are you sure? "} %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

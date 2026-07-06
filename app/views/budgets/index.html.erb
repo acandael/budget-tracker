@@ -1,0 +1,12 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Budgets" %>
+
+<header>
+  <h1>Budgets</h1>
+  <%= link_to "New budget", new_budget_path %>
+</header>
+<ul id="budgets">
+    <%= render @budgets %>
+</ul>
+
