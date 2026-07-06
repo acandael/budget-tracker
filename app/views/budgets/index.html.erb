@@ -1,12 +1,16 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Budgets" %>
-
-<header>
+<% if notice.present? %>
+  <p class="notice"><%= notice %></p>
+<% end %>
+<div class="page-header">
   <h1>Budgets</h1>
-  <%= link_to "New budget", new_budget_path %>
-</header>
-<ul id="budgets">
-    <%= render @budgets %>
+  <div class="page-header__actions">
+    <button commandfor="<%= dom_id(@new_budget) %>" command="toggle-popover" class="btn btn-primary">
+      New budget
+    </button>
+    <%= render "form", budget: @new_budget %>
+  </div>
+</div>
+<ul id="budgets" class="budget-list">
+  <%= render @budgets %>
 </ul>
-

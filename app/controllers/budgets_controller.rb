@@ -3,6 +3,7 @@ class BudgetsController < ApplicationController
 
   # GET /budgets or /budgets.json
   def index
+    @new_budget = Budget.new
     @budgets = Budget.all
   end
 

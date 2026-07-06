@@ -1,10 +1,378 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+
+/* ── Variables ──────────────────────────────────────────────── */
+:root {
+  --color-bg:          #f8f9fb;
+  --color-surface:     #ffffff;
+  --color-border:      #e2e6ed;
+  --color-accent:      #4f6ef7;
+  --color-accent-dark: #3b57d6;
+  --color-text:        #1a1d23;
+  --color-muted:       #6b7280;
+  --color-success:     #16a34a;
+  --color-danger:      #dc2626;
+  --color-income:      #16a34a;
+  --color-expense:     #dc2626;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+  min-height: 100vh;
+}
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul { list-style: none; }
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.nav {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 56px;
+  gap: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.nav__brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -.3px;
+}
+.nav__brand:hover { text-decoration: none; color: var(--color-accent); }
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+/* ── Page header ────────────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.page-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -.4px;
+}
+.page-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background .15s, border-color .15s, color .15s;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn:hover { text-decoration: none; }
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+.btn-primary:hover { background: var(--color-accent-dark); border-color: var(--color-accent-dark); }
+
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+.btn-secondary:hover { background: var(--color-bg); }
+
+.btn-danger {
+  background: transparent;
+  color: var(--color-danger);
+  border-color: #fca5a5;
+}
+.btn-danger:hover { background: #fef2f2; }
+
+/* Turbo form buttons (button_to) inherit btn styles */
+.btn form,
+.btn input[type="submit"] { all: unset; }
+
+/* ── Flash notice ────────────────────────────────────────────── */
+.notice {
+  background: #f0fdf4;
+  color: var(--color-success);
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* ── Flash alert ────────────────────────────────────────────── */
+.alert {
+  background: #fef2f2;
+  color: var(--color-danger);
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* ── Card ───────────────────────────────────────────────────── */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Budget list ────────────────────────────────────────────── */
+.budget-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.budget-item {
+  display: flex;
+  align-items: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .15s, border-color .15s;
+
+  a {
+    padding: 14px 20px;
+    width: 100%;
+  }
+}
+
+.budget-item:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+}
+.budget-item a {
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--color-text);
+}
+.budget-item a:hover { color: var(--color-accent); text-decoration: none; }
+
+/* ── Summary cards ──────────────────────────────────────────── */
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.summary-card {
+  padding: 18px 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+.summary-card__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--color-muted);
+  margin-bottom: 4px;
+}
+.summary-card__value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -.4px;
+}
+.summary-card--income .summary-card__value  { color: var(--color-income); }
+.summary-card--expense .summary-card__value { color: var(--color-expense); }
+.summary-card--balance .summary-card__value { color: var(--color-accent); }
+
+/* ── Table ──────────────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface);
+}
+.data-table th,
+.data-table td {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+}
+.data-table thead th {
+  background: var(--color-bg);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--color-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+.data-table tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background .1s;
+}
+.data-table tbody tr:last-child { border-bottom: none; }
+.data-table tbody tr:hover { background: #f5f7ff; }
+.data-table .td-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.badge-income  { background: #dcfce7; color: #15803d; }
+.badge-expense { background: #fee2e2; color: #b91c1c; }
+
+/* ── Forms ──────────────────────────────────────────────────── */
+.form-card,
+[popover]{
+  max-width: 480px;
+  padding: 32px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+
+  &.centered {
+    margin: 0 auto;
+  }
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group select {
+  width: auto;
+  padding: 9px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(79,110,247,.15);
+  background: #fff;
+}
+/* Rails date_select spans */
+.form-group select + select { width: auto; }
+
+.form-group:has( input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+
+  label {
+    margin-right: 4px;
+  }
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* ── Error list ─────────────────────────────────────────────── */
+.error-list {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.error-list h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-danger);
+  margin-bottom: 8px;
+}
+.error-list ul { padding-left: 16px; list-style: disc; }
+.error-list li { font-size: 13px; color: var(--color-danger); }
+
+/* ── Back link / breadcrumb ─────────────────────────────────── */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-muted);
+  margin-bottom: 20px;
+}
+.back-link:hover { color: var(--color-accent); text-decoration: none; }
+.back-link::before { content: "←"; }
+
+[popover] {
+  inset: unset;
+  top: anchor(bottom);
+  right: anchor(right);
+  position-try-fallbacks: flip-block;
+}

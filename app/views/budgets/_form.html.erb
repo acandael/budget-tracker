@@ -1,6 +1,6 @@
-<%= form_with(model: budget) do |form| %>
+<%= form_with(model: budget, id: dom_id(budget), html: {popover: "auto"}) do |form| %>
   <% if budget.errors.any? %>
-    <div style="color: red">
+    <div class="error-list">
       <h2><%= pluralize(budget.errors.count, "error") %> prohibited this budget from being saved:</h2>
       <ul>
         <% budget.errors.each do |error| %>
@@ -9,11 +9,11 @@
       </ul>
     </div>
   <% end %>
-  <div>
-    <%= form.label :month, style: "display: block" %>
-    <%= form.date_select :month, discard_day: true, order: [:month, :year], start_year: Date.today.year - 1 %>
+  <div class="form-group">
+    <%= form.label :month %>
+    <%= form.date_select :month, discard_day: true, order: [ :month, :year ], start_year: Date.today.year - 1 %>
   </div>
-  <div>
-    <%= form.submit %>
+  <div class="form-actions">
+    <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>

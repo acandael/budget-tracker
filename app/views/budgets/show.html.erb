@@ -1,33 +1,87 @@
-<p style="color: green"><%= notice %></p>
-<header>
-  <%= link_to "Back to budgets", budgets_path %>
+<% if notice.present? %>
+  <p class="notice"><%= notice %></p>
+<% end %>
+<% if alert.present? && alert.is_a?(Array) %>
+  <div class="error-list">
+    <h2><%= pluralize(alert.size, "error") %> prohibited this:</h2>
+    <ul>
+      <% alert.each do |error| %>
+        <li><%= error %></li>
+      <% end %>
+    </ul>
+  </div>
+<% elsif alert.present? %>
+  <p class="alert">
+    <%= alert %>
+  </p>
+<% end %>
+<%= link_to "Back to budgets", budgets_path, class: "back-link" %>
+<div class="page-header">
   <h1><%= @budget.formatted_month %> Budget</h1>
-  <%= link_to "Edit this budget", edit_budget_path(@budget) %> |
-  <%= button_to "Destroy this budget", @budget, method: :delete, data: { turbo_confirm: "Are you sure?"} %>
-  <%= link_to "Add a new transaction", new_budget_transaction_path(@budget) %>
-</header>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Amount</th>
-      <th>Due Date</th>
-      <th>Type</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @budget.transactions.each do |transaction| %>
+  <div class="page-header__actions">
+    <button commandfor="<%= dom_id(@budget) %>" command="toggle-popover" class="btn btn-secondary">
+      Edit
+    </button>
+    <%= render "form", budget: @budget %>
+    <%= button_to "Delete", @budget, method: :delete,
+      data: { turbo_confirm: "Are you sure?" },
+      class: "btn btn-danger" %>
+    <button commandfor="new_transaction" command="toggle-popover" class="btn btn-primary">
+      New transaction
+    </button>
+    <%= render "transactions/form", budget: @budget, transaction: Transaction.new %>
+  </div>
+</div>
+<div class="summary">
+  <div class="summary-card summary-card--income">
+    <div class="summary-card__label">Total Income</div>
+    <div class="summary-card__value"><%= number_to_currency(@budget.total_income) %></div>
+  </div>
+  <div class="summary-card summary-card--expense">
+    <div class="summary-card__label">Total Expenses</div>
+    <div class="summary-card__value"><%= number_to_currency(@budget.total_expenses) %></div>
+  </div>
+  <div class="summary-card summary-card--balance">
+    <div class="summary-card__label">Remaining Balance</div>
+    <div class="summary-card__value"><%= number_to_currency(@budget.remaining_balance) %></div>
+  </div>
+</div>
+<div class="table-wrap">
+  <table class="data-table">
+    <thead>
       <tr>
-        <td><%= transaction.name.capitalize %></td>
-        <td><%= number_to_currency(transaction.amount) %></td>
-        <td><%= transaction.formatted_due_date %></td>
-        <td><%= transaction.transaction_type.capitalize %></td>
-        <td>
-          <%= link_to "Edit", edit_budget_transaction_path(@budget, transaction) %>
-          <%= button_to "Destroy", budget_transaction_path(@budget, transaction), method: :delete, data: { turbo_confirm: "Are you sure? "} %>
-        </td>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Due Date</th>
+        <th>Type</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @budget.transactions.each do |transaction| %>
+        <tr>
+          <td><%= transaction.name.capitalize %></td>
+          <td><%= number_to_currency(transaction.amount) %></td>
+          <td><%= transaction.formatted_due_date %></td>
+          <td>
+            <span class="badge <%= transaction.transaction_type == 'income' ? 'badge-income' : 'badge-expense' %>">
+              <%= transaction.transaction_type.capitalize %>
+            </span>
+          </td>
+          <td>
+            <div class="td-actions">
+              <button commandfor="<%= dom_id(transaction) %>" command="toggle-popover" class="btn btn-secondary">
+                Edit
+              </button>
+              <%= render "transactions/form", budget: @budget, transaction: transaction %>
+              <%= button_to "Delete", budget_transaction_path(@budget, transaction),
+                method: :delete,
+                data: { turbo_confirm: "Are you sure?" },
+                class: "btn btn-danger" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
