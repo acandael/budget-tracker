@@ -64,6 +64,6 @@ class TransactionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def transaction_params
-      params.expect(transaction: [ :name, :amount, :due_date, :transaction_type ])
+      params.expect(transaction: [ :name, :amount, :due_date, :transaction_type, :recurring ])
     end
 end
