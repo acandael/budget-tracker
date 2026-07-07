@@ -5,6 +5,9 @@ class Transaction < ApplicationRecord
 
   scope :recurring, -> { where(recurring: true) }
 
+  validates :name, :due_date, presence: true
+  validates :amount, numericality: { greater_than_or_equal_to: 0.00 }
+
   def self.types_for_select
     transaction_types.keys.map { [ it.capitalize, it ] }
   end

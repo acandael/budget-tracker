@@ -20,7 +20,8 @@ class TransactionsController < ApplicationController
         format.html { redirect_to @transaction.budget, notice: "Transaction was successfully created." }
         format.json { render :show, status: :created, location: @transaction }
       else
-        format.html { render :new, status: :unprocessable_content }
+        # format.html { render :new, status: :unprocessable_content }
+        format.html { redirect_to @budget, alert: @transaction.errors.full_messages }
         format.json { render json: @transaction.errors, status: :unprocessable_content }
       end
     end
@@ -33,7 +34,7 @@ class TransactionsController < ApplicationController
         format.html { redirect_to @transaction.budget, notice: "Transaction was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @transaction }
       else
-        format.html { render :edit, status: :unprocessable_content }
+        format.html { redirect_to @budget, alert: @transaction.errors.full_messages }
         format.json { render json: @transaction.errors, status: :unprocessable_content }
       end
     end
