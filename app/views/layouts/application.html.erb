@@ -20,6 +20,14 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
+    <nav class="nav">
+      <%= link_to "Tally", budgets_path, class: "nav__brand" %>
+      <% if authenticated? %>
+        <%= button_to "Logout", session_path, method: :delete, class: "btn btn-secondary" %>
+      <% else %>
+        <%= link_to "Sign Up", new_registration_path, class: "btn btn-primary" %>
+      <% end %>
+    </nav>
     <main class="container">
       <%= yield %>
     </main>

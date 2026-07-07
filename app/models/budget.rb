@@ -1,4 +1,5 @@
 class Budget < ApplicationRecord
+  belongs_to :user
   has_many :transactions, dependent: :destroy
 
   def formatted_month

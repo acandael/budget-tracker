@@ -1,4 +1,5 @@
-budget = Budget.create!(month: Date.today.beginning_of_month)
+user = User.create!(email_address: "demo@example.com", password: "password")
+budget = user.budgets.create!(month: Date.today.beginning_of_month)
 
 [
   { transaction_type: :income,  amount: 3000.00, name: "Salary",             due_date: budget.month },

@@ -1,0 +1,27 @@
+<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+<%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
+<div class="form-card centered">
+  <%= form_with model: @user, url: registrations_path do |form| %>
+    <% if form.object.errors.any? %>
+      <div class="error-list">
+        <h2><%= pluralize(form.object.errors.count, "error") %> prohibited this:</h2>
+        <ul>
+          <% form.object.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="form-group">
+      <%= form.label :email_address %>
+      <%= form.email_field :email_address, required: true, autofocus: true, placeholder: "Enter your email address" %><br>
+    </div>
+    <div class="form-group">
+      <%= form.label :password %>
+      <%= form.password_field :password, required: true, placeholder: "Enter your password", maxlength: 72 %><br>
+    </div>
+    <div class="form-actions">
+      <%= form.submit "Sign up", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

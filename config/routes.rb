@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :registrations
+  resources :passwords, param: :token
   resources :budgets do
-    resources :transactions, except: [:index, :show]
+    resources :transactions, except: [ :index, :show ]
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
